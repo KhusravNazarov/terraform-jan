@@ -63,49 +63,49 @@ resource "aws_subnet" "private3" {
   }
 }
 ////Ruote tables /// 
-resource "aws_route_table" "example" {
+resource "aws_route_table" "public_route_table" {
    vpc_id = aws_vpc.main.id
      tags = {
-    Name = "publicRouteTable"
+    Name = "public-route-table"
   }
 }
-resource "aws_route_table" "privateRouteTable" {
+resource "aws_route_table" "private_route_table" {
    vpc_id = aws_vpc.main.id
      tags = {
-    Name = "privateRouteTable"
+    Name = "private-route-table"
   }
 }
 ///aws_route_table_association///
 resource "aws_route_table_association" "public1" {
   subnet_id      = aws_subnet.public1.id
-  route_table_id = aws_route_table.example.id
+  route_table_id = aws_route_table.public_route_table.id
 }
 resource "aws_route_table_association" "public2" {
   subnet_id      = aws_subnet.public2.id
-  route_table_id = aws_route_table.example.id
+  route_table_id = aws_route_table.public_route_table.id
 }
 resource "aws_route_table_association" "public3" {
   subnet_id      = aws_subnet.public3.id
-  route_table_id = aws_route_table.example.id
+  route_table_id = aws_route_table.public_route_table.id
 }
 resource "aws_route_table_association" "private1" {
   subnet_id      = aws_subnet.private1.id
-  route_table_id = aws_route_table.privateRouteTable.id
+  route_table_id = aws_route_table.private_route_table.id
 }
 resource "aws_route_table_association" "private2" {
   subnet_id      = aws_subnet.private2.id
-  route_table_id = aws_route_table.privateRouteTable.id
+  route_table_id = aws_route_table.private_route_table.id
 }
 resource "aws_route_table_association" "private3" {
   subnet_id      = aws_subnet.private3.id
-  route_table_id = aws_route_table.privateRouteTable.id
+  route_table_id = aws_route_table.private_route_table.id
 }
 ///aws_internet_gateway///
-resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.main.id
+resource "aws_internet_gateway" "internet_gateway" {
+  vpc_id = aws_vpc.main.id  //attach to vpc
 
   tags = {
-    Name = "internetGateway"
+    Name = "internet-gateway"
   }
   ///aws_eip///
 }
@@ -115,22 +115,22 @@ resource "aws_eip" "eip" {
     }
 }
 ///aws_nat_gateway///
-resource "aws_nat_gateway" "example" {
+resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.eip.id
   subnet_id     = aws_subnet.public1.id
 
   tags = {
-    Name = "NAT"
+    Name = "nat-gateway"
   }
 }
 /// add aws_route ///
-resource "aws_route" "addRouteInt" {
-  route_table_id            = aws_route_table.example.id
+resource "aws_route" "internet_gateway_route" {
+  route_table_id            = aws_route_table.public_route_table.id
   destination_cidr_block    = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.gw.id 
+  gateway_id = aws_internet_gateway.internet_gateway.id 
 }
-resource "aws_route" "addRouteNAT" {
-  route_table_id            = aws_route_table.privateRouteTable.id
+resource "aws_route" "nat_gateway_route" {
+  route_table_id            = aws_route_table.private_route_table.id
   destination_cidr_block    = "0.0.0.0/0"
-  nat_gateway_id = aws_nat_gateway.example.id 
+  nat_gateway_id = aws_nat_gateway.nat_gateway.id 
 }

@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "terraform-khusrav"
-    key = "session3/terraform.tfstate"  //Path to your remote Backend file (terraform.tfstate)
+    key = "vpc/terraform.tfstate"  //Path to your remote Backend file (terraform.tfstate)
     region = "us-west-2"
   }
 }
