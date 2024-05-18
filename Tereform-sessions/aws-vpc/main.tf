@@ -7,34 +7,35 @@ resource "aws_vpc" "main" {
   }
 }
 
-///subnets///
-resource "aws_subnet" "public1" {
+///subnets/// 3public and 3 private
+resource "aws_subnet" "public" {
+  count = 3
   vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.1.0/24"
-  availability_zone = "us-west-2a"
+  cidr_block = element(var.pub_cidr, count.index)
+  availability_zone = element(var.oregon_azs, count.index)
 
   tags = {
     Name = "public-sub-1"
   }
 }
-resource "aws_subnet" "public2" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.2.0/24"
-  availability_zone = "us-west-2b"
+# resource "aws_subnet" "public2" {
+#   vpc_id     = aws_vpc.main.id
+#   cidr_block = "10.0.2.0/24"
+#   availability_zone = "us-west-2b"
 
-  tags = {
-    Name = "public-sub-2"
-  }
-}
-resource "aws_subnet" "public3" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = "10.0.3.0/24"
-  availability_zone = "us-west-2d"
+#   tags = {
+#     Name = "public-sub-2"
+#   }
+# }
+# resource "aws_subnet" "public3" {
+#   vpc_id     = aws_vpc.main.id
+#   cidr_block = "10.0.3.0/24"
+#   availability_zone = "us-west-2d"
 
-  tags = {
-    Name = "public-sub-3"
-  }
-}
+#   tags = {
+#     Name = "public-sub-3"
+#   }
+# }
 resource "aws_subnet" "private1" {
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.11.0/24"
