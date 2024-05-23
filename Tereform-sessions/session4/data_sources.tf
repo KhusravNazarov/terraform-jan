@@ -1,0 +1,26 @@
+data "aws_ami" "amazon_linux_2023" {
+  most_recent      = true
+  owners           = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023.4.*"]
+  }
+#   semantic versioning:
+#  major ,minor , Patch
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
+//Data source block : Fetch data from pre-existing Resource 
+//syntax: data "first label" "secong lable"
+
+
+data "template_file" "userdata" {
+  template = file("userdata.sh")
+  vars = {
+    enviroment = var.env
+  }
+}

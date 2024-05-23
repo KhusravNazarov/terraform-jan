@@ -10,3 +10,8 @@ variable "ports" {
   default = [22, 80, 443]
 
 }
+variable "instance_type" {
+  type = string
+  default = "t2.micro"
+  
+}
