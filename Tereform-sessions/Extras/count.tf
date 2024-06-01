@@ -1,5 +1,5 @@
 resource "aws_sqs_queue" "count_queue" {
-    count = 3
+    count = length(var.naems)
      name = element(var.naems, count.index)
     
   
