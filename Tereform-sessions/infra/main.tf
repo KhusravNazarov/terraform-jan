@@ -99,7 +99,7 @@ resource "aws_launch_template" "launch_template" {
 network_interfaces {
   security_groups = [aws_security_group.security_http.id]
   associate_public_ip_address = true
-  subnet_id                   = aws_subnet.public1.id
+  subnet_id                   = aws_subnet.public_subnets.0.id
   delete_on_termination       = true 
 }
    
@@ -111,7 +111,7 @@ network_interfaces {
   }
 
  resource "aws_security_group" "security_http" {
-  name        = "sg-${local.Name}"
+  # name        = "sg-${local.Name}"
   description = "Allow TLS inbound traffic and all outbound traffic"
 }
 //how to reference ti Resiyrce?
