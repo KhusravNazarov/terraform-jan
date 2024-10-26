@@ -1,4 +1,8 @@
 
+terraform plan -var-file="clients.tfvars"
+
+terraform apply -var-file="clients.tfvars"
+
 Starting with the child module (modules/dns/main.tf):
 
 resource "aws_route53_zone" "primary" {
